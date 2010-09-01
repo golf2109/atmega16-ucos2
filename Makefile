@@ -53,8 +53,8 @@ OS_SRC = os/os_core.c   \
 CPU_C  = avr/os_cpu_c.c    \
          avr/avr_isr.c      
 
-CPU_A  = avr/os_cpu_a.s    \
-         avr/avr_vect.s     
+CPU_A  = avr/os_cpu_a.S    \
+         avr/avr_vect.S     
 		 
 APPS   = app/main.c       
 
