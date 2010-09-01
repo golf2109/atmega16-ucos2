@@ -1,0 +1,1 @@
+<Project name="uCOS2AVR"><Folder name="AVR"><File path="AVR\OS_CPU_A.S"></File><File path="AVR\OS_CPU_C.c"></File></Folder><Folder name="Config"><File path="Config\os_cfg.h"></File><File path="AVR\OS_CPU.h"></File></Folder><Folder name="APP1"><File path="APP1\main.c"></File></Folder><File path="Makefile"></File></Project>

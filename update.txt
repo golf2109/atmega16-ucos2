@@ -1,0 +1,34 @@
+uC/OS-II 在 AVR 上的移植
+
+IDE: PN
+Compiler: AVR-GCC ( WinAVR 20050214 )
+Target:    ATmega16 @ 7.3728MHz
+
+2005-07-28
+V1.0
+          1. 由于ATmega16的RAM资源很少，所以在OS_CFG.H中关闭所有不必要的功能，同时优化代码，减少RAM占用
+             在os_core.c中，有两个数组： INT8U  const  OSMapTbl[8]与 INT8U  const  OSUnMapTbl[256]，虽然声明为const类型，但是avr－gcc并不会将其放置在flash中，必须加以修改为INT8U  const  OSMapTbl[8]  PROGMEM 与INT8U  const  OSUnMapTbl[256] PROGMEM ，同样的，该文件中访问这些数组的语句也必须做相应的修改。这样的结果是速度会受到影响，但是由于仍然是查表操作，任务切换的时间还是确定的。
+          2. 任务说明
+             系统中一共有5个用户任务：Task1－Task5，其优先级依次为1，2，3，5，4。每个用户任务的堆栈均为OS_USER_TASK_STK_SIZE（定义于os_cfg.h，目前为64字节）。
+             系统中建立有一个信号量T2sem与一个邮箱Tmbox。
+             Task1完成了Timer0的初始化，并打开了定时器中断，使得任务调度可以正常进行。此后，该任务只隔一个很短的时间使得变量t1增加，同时取反PORTB.1。
+             Task2初始化了Timer2，并使能了Timer2中断，然后任务挂起，等待信号量T2sem，如果等到且无错误，则使得变量t2增加。
+             Task3使得PD2上出现一个脉冲，以触发INT0，并使得变量t3增加。
+             Task4使得PD3上出现一个脉冲，以触发INT1，并使得变量t4增加。
+             Task5使得该任务挂起等待邮箱中有一条消息，如果取得消息，就将t5的值更新。 
+           3. 中断系统
+              需要引用系统服务的中断，其底层部分被定义于AVRect.S中，中断的处理函数被定义于AVRisr.c中，例如例子中外部中断0与外部中断1的服务函数。
+             对于无需引用系统服务的中断函数，比如例子中的Timer2比较匹配中断，可以全部定义于AVRisr.c中。
+             Timer2的中断只是使得变量t6增加。
+             INT0的中断向任务发出信号量。
+             INT1的中断发送一个消息到信箱。
+             由于AVR的RAM有限，移植并未考虑中断重入的问题。 
+                   
+2005-07-16
+V0.9
+          1. OS版本为2.76
+          2. 使用Timer0的比较匹配中断为系统定时，频率为100Hz
+          3. 三种临界代码保护方式均可以使用，在OS_CPU.h里直接设置即可
+
+          如果安装了WinAVR20050214，则直接运行start.bat，输入make all即可开始编译。
+          如果需要在AVRStudio仿真，运行make extcoff后即可生成调试所需的cof文件。
