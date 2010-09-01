@@ -4,8 +4,8 @@
 
 #define INC_FROM_OS_CPU_ASM
 
-#include "../AVR/os_cpu.h"
-#include "../Config/os_cfg.h"
+#include "../avr/os_cpu.h"
+#include "../config/os_cfg.h"
 
 ;*************************************************************************************************************
 ;OS_EXT  INT8U             OSIntNesting;                        /* Interrupt nesting level                           */
