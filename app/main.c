@@ -141,5 +141,7 @@ int main(void)
 	Tmbox = OSMboxCreate((void *)0); 
 
 	OSStart();
+	
+	return 0;
 }
 
