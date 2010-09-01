@@ -1,5 +1,17 @@
 #include "app_cfg.h"
 
+//--------------系统对象-----------------
+OS_EVENT *T2sem = (OS_EVENT *)0;
+OS_EVENT *Tmbox = (OS_EVENT *)0;
+
+//--------------任务堆栈-----------------
+OS_STK Task1Stk[OS_USER_TASK_STK_SIZE] = {0};
+OS_STK Task2Stk[OS_USER_TASK_STK_SIZE] = {0};
+OS_STK Task3Stk[OS_USER_TASK_STK_SIZE] = {0};
+OS_STK Task4Stk[OS_USER_TASK_STK_SIZE] = {0};
+OS_STK Task5Stk[OS_USER_TASK_STK_SIZE] = {0};
+
+//-------------消息结构体----------------
 struct msgTask
 {
 	unsigned char cnt;
@@ -9,21 +21,13 @@ struct msgTask
 struct msgTask T5mbox = {1,"Hello"};
 struct msgTask *pMsgTsk = &T5mbox;
 
-OS_STK Task1Stk[OS_USER_TASK_STK_SIZE] = {0};
-OS_STK Task2Stk[OS_USER_TASK_STK_SIZE] = {0};
-OS_STK Task3Stk[OS_USER_TASK_STK_SIZE] = {0};
-OS_STK Task4Stk[OS_USER_TASK_STK_SIZE] = {0};
-OS_STK Task5Stk[OS_USER_TASK_STK_SIZE] = {0};
-
+//-------------全局变量------------------
 volatile unsigned char t1 = 0;
 volatile unsigned char t2 = 0;
 volatile unsigned char t3 = 0;
 volatile unsigned char t4 = 0;
 volatile unsigned char t5 = 0;
 volatile unsigned char t6 = 0;
-
-OS_EVENT *T2sem = (OS_EVENT *)0;
-OS_EVENT *Tmbox = (OS_EVENT *)0;
  
 void Task1(void *pdata)
 {

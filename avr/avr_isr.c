@@ -9,11 +9,13 @@ void IsrEint0(void)
 	OSSemPost(T2sem);
 }
 /*************************************************************************************************************/
+
 extern struct msgTask
 {
 	unsigned char cnt;
 	char *s;
 }*pMsgTsk;
+
 
 void IsrEint1(void)
 {
