@@ -37,7 +37,7 @@ FORMAT = ihex
 # Target file name (without extension).
 TARGET = uCOS2AVR
 
-INCPATH  = AVR config OSsrc
+INCPATH  = AVR config OS
 TOPDIR = .
 
 OS_SRC = OSsrc/os_core.c   \
@@ -56,7 +56,7 @@ CPU_C  = AVR/OS_CPU_C.c    \
 CPU_A  = AVR/OS_CPU_A.S    \
          AVR/AVRvect.S     
 		 
-APPS   = APP1/main.c       
+APPS   = app/main.c       
 
 # List C source files here. (C dependencies are automatically generated.)
 SRC = $(OS_SRC)     \
