@@ -37,24 +37,24 @@ FORMAT = ihex
 # Target file name (without extension).
 TARGET = uCOS2AVR
 
-INCPATH  = AVR config OS
+INCPATH  = avr config os
 TOPDIR = .
 
-OS_SRC = OS/os_core.c   \
-         OS/os_flag.c   \
-		 OS/os_mbox.c   \
-		 OS/os_mem.c    \
-		 OS/os_mutex.c  \
-         OS/os_q.c      \
-		 OS/os_sem.c    \
-		 OS/os_task.c   \
-		 OS/os_time.c 
+OS_SRC = os/os_core.c   \
+         os/os_flag.c   \
+		 os/os_mbox.c   \
+		 os/os_mem.c    \
+		 os/os_mutex.c  \
+         os/os_q.c      \
+		 os/os_sem.c    \
+		 os/os_task.c   \
+		 os/os_time.c 
 
 CPU_C  = avr/os_cpu_c.c    \
          avr/avr_isr.c      
 
-CPU_A  = avr/os_cpu_a.S    \
-         avr/avr_vect.S     
+CPU_A  = avr/os_cpu_a.s    \
+         avr/avr_vect.s     
 		 
 APPS   = app/main.c       
 
