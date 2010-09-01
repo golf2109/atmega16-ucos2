@@ -1,28 +1,19 @@
 // AVRisr.c
 /*  AVR ISR */
-
-#include <avr/io.h>
 #include <avr/interrupt.h>
-
-#include "ucos_ii.h"
+#include "app_cfg.h"
 
 /*************************************************************************************************************/
-extern OS_EVENT *T2sem;
 void IsrEint0(void)
 {
 	OSSemPost(T2sem);
-
 }
 /*************************************************************************************************************/
-extern OS_EVENT *Tmbox;
-
 extern struct msgTask
 {
 	unsigned char cnt;
 	char *s;
 }*pMsgTsk;
-
-extern unsigned char t4;
 
 void IsrEint1(void)
 {
@@ -32,7 +23,6 @@ void IsrEint1(void)
 	OSMboxPost(Tmbox,(void *)pMsgTsk);
 }
 /*************************************************************************************************************/
-extern volatile unsigned char t6;
 ISR(SIG_OUTPUT_COMPARE2)
 {
 	t6++;
