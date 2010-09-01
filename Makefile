@@ -40,15 +40,15 @@ TARGET = uCOS2AVR
 INCPATH  = AVR config OS
 TOPDIR = .
 
-OS_SRC = OSsrc/os_core.c   \
-         OSsrc/os_flag.c   \
-		 OSsrc/os_mbox.c   \
-		 OSsrc/os_mem.c    \
-		 OSsrc/os_mutex.c  \
-         OSsrc/os_q.c      \
-		 OSsrc/os_sem.c    \
-		 OSsrc/os_task.c   \
-		 OSsrc/os_time.c 
+OS_SRC = OS/os_core.c   \
+         OS/os_flag.c   \
+		 OS/os_mbox.c   \
+		 OS/os_mem.c    \
+		 OS/os_mutex.c  \
+         OS/os_q.c      \
+		 OS/os_sem.c    \
+		 OS/os_task.c   \
+		 OS/os_time.c 
 
 CPU_C  = AVR/OS_CPU_C.c    \
          AVR/AVRisr.c      
@@ -56,7 +56,7 @@ CPU_C  = AVR/OS_CPU_C.c    \
 CPU_A  = AVR/OS_CPU_A.S    \
          AVR/AVRvect.S     
 		 
-APPS   = app/main.c       
+APPS   = APP1/main.c       
 
 # List C source files here. (C dependencies are automatically generated.)
 SRC = $(OS_SRC)     \
