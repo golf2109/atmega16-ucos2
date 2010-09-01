@@ -37,7 +37,7 @@ FORMAT = ihex
 # Target file name (without extension).
 TARGET = uCOS2AVR
 
-INCPATH  = AVR Config OSsrc
+INCPATH  = AVR config OSsrc
 TOPDIR = .
 
 OS_SRC = OSsrc/os_core.c   \
