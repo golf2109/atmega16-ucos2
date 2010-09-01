@@ -2,7 +2,7 @@
 /*  AVR ISR */
 
 #include <avr/io.h>
-#include <avr/signal.h>
+#include <avr/interrupt.h>
 
 #include "ucos_ii.h"
 
@@ -19,9 +19,8 @@ extern OS_EVENT *Tmbox;
 extern struct msgTask
 {
 	unsigned char cnt;
-	unsigned char *s;
+	char *s;
 }*pMsgTsk;
-
 
 extern unsigned char t4;
 
@@ -34,7 +33,7 @@ void IsrEint1(void)
 }
 /*************************************************************************************************************/
 extern volatile unsigned char t6;
-INTERRUPT(SIG_OUTPUT_COMPARE2)
+ISR(SIG_OUTPUT_COMPARE2)
 {
 	t6++;
 }

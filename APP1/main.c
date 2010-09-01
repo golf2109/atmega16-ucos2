@@ -58,7 +58,7 @@ OS_EVENT *Tmbox = (OS_EVENT *)0;
 struct msgTask
 {
 	unsigned char cnt;
-	unsigned char *s;
+	char *s;
 };
 
 struct msgTask T5mbox = {1,"Hello"};
