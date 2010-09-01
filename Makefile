@@ -50,11 +50,11 @@ OS_SRC = OS/os_core.c   \
 		 OS/os_task.c   \
 		 OS/os_time.c 
 
-CPU_C  = avr/OS_CPU_C.c    \
-         avr/AVRisr.c      
+CPU_C  = avr/os_cpu_c.c    \
+         avr/avr_isr.c      
 
-CPU_A  = avr/OS_CPU_A.S    \
-         avr/AVRvect.S     
+CPU_A  = avr/os_cpu_a.S    \
+         avr/avr_vect.S     
 		 
 APPS   = app/main.c       
 
