@@ -1,5 +1,14 @@
 #include "app_cfg.h"
 
+struct msgTask
+{
+	unsigned char cnt;
+	char *s;
+};
+
+struct msgTask T5mbox = {1,"Hello"};
+struct msgTask *pMsgTsk = &T5mbox;
+
 OS_STK Task1Stk[OS_USER_TASK_STK_SIZE] = {0};
 OS_STK Task2Stk[OS_USER_TASK_STK_SIZE] = {0};
 OS_STK Task3Stk[OS_USER_TASK_STK_SIZE] = {0};
@@ -15,15 +24,6 @@ volatile unsigned char t6 = 0;
 
 OS_EVENT *T2sem = (OS_EVENT *)0;
 OS_EVENT *Tmbox = (OS_EVENT *)0;
-
-struct msgTask
-{
-	unsigned char cnt;
-	char *s;
-};
-
-struct msgTask T5mbox = {1,"Hello"};
-struct msgTask *pMsgTsk = &T5mbox;
  
 void Task1(void *pdata)
 {
