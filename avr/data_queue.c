@@ -1,38 +1,5 @@
 #include "config.h"
 
-//-----------------数据结构体-----------------------
-struct _DATA
-{
-	unsigned char data_code;
-	unsigned char data_size;
-	union{
-		unsigned char cDatas[ DATA_MAX_SIZE ];
-		float fDatas[ DATA_MAX_SIZE/4 ];
-		struct{
-			float fCurrent;
-			float fVoltage;
-			float fPower;
-			float fFlowSpeed;
-			float fTorque;
-			float fRotateSpeed;
-		};
-	};
-	unsigned char data_end;
-};
-
-struct _DATA_BUF
-{
-	unsigned char status;
-	DATA data;
-};
-
-struct _DATAQUEUE
-{
-	unsigned char front;
-	unsigned char rear;
-	DATA data[ DATA_MAX_NUM ];
-};
-
 // ---------------定义变量----------------------
 DATAQUEUE		data_queue;
 DATA_BUF		data_buf;

@@ -4,45 +4,6 @@
 CMDQUEUE		cmd_queue;
 CMD_RCV_BUF		cmd_rcv_buf;
 
-struct _CMD
-{
-	unsigned char cmd_code;
-	unsigned char para_size;
-	union
-	{
-		unsigned char para[ PARA_MAX_SIZE ];
-		struct
-		{
-			unsigned char n;
-			float fPara;
-		};
-		struct
-		{
-			unsigned short int addr;
-			union
-			{
-				float fData;
-				long  lData;
-				unsigned short int nData[2];
-			};
-		};
-	};
-};
-
-struct _CMD_RCV_BUF
-{
-	unsigned char status;
-	unsigned char ptr;
-	CMD cmd;
-};
-
-struct _CMDQUEUE
-{
-	unsigned char front;
-	unsigned char rear;
-	CMD cmd[ CMD_MAX_NUM ];
-};
-
 void CmdRcvBuf_Init(void)
 {
 	memset(&cmd_rcv_buf, 0x00, sizeof(CMD_RCV_BUF));

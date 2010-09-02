@@ -78,11 +78,11 @@ typedef unsigned char 				bool;
 extern volatile unsigned char t5;
 //-------------自定义头文件------------
 #include "ucos_ii.h"
-#include "uart.h"
 #include "data_queue.h"
 #include "cmd_queue.h"
 #include "os_cpu.h"
 #include "os_cfg.h"
+#include "uart.h"
 
 extern OS_EVENT *T2sem;
 extern OS_EVENT *Tmbox;

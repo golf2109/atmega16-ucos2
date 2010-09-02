@@ -14,12 +14,45 @@
 #define CMDQUEUE_REAR_ADD();		{cmd_queue.rear = (cmd_queue.rear + 1) & CMD_MAX_NUM_MASK;}
 #define CMDQUEUE_FRONT_ADD(); 		{cmd_queue.front = (cmd_queue.front + 1) & CMD_MAX_NUM_MASK;}
 
-struct _CMD;
-struct _CMD_RCV_BUF;
-struct _CMDQUEUE;
-typedef struct _CMD 		CMD;
-typedef struct _CMD_RCV_BUF CMD_RCV_BUF;
-typedef struct _CMDQUEUE 	CMDQUEUE;
+typedef struct
+{
+	unsigned char cmd_code;
+	unsigned char para_size;
+	union
+	{
+		unsigned char para[ PARA_MAX_SIZE ];
+		struct
+		{
+			unsigned char n;
+			float fPara;
+		};
+		struct
+		{
+			unsigned short int addr;
+			union
+			{
+				float fData;
+				long  lData;
+				unsigned short int nData[2];
+			};
+		};
+	};
+}CMD;
+
+typedef struct
+{
+	unsigned char status;
+	unsigned char ptr;
+	CMD cmd;
+}CMD_RCV_BUF;
+
+typedef struct
+{
+	unsigned char front;
+	unsigned char rear;
+	CMD cmd[ CMD_MAX_NUM ];
+}CMDQUEUE;
+
 
 extern CMDQUEUE		cmd_queue;
 extern CMD_RCV_BUF	cmd_rcv_buf;

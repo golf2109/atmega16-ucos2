@@ -12,12 +12,39 @@
 #define DATAQUEUE_REAR_ADD();		{data_queue.rear  = (data_queue.rear + 1)  & DATA_MAX_NUM_MASK;}
 #define DATAQUEUE_FRONT_ADD();	 	{data_queue.front = (data_queue.front + 1) & DATA_MAX_NUM_MASK;}
 
-struct _DATA;
-struct _DATA_BUF;
-struct _DATAQUEUE;
-typedef struct _DATA 		DATA;
-typedef struct _DATA_BUF  	DATA_BUF;
-typedef struct _DATAQUEUE 	DATAQUEUE;
+//-----------------数据结构体-----------------------
+typedef struct
+{
+	unsigned char data_code;
+	unsigned char data_size;
+	union{
+		unsigned char cDatas[ DATA_MAX_SIZE ];
+		float fDatas[ DATA_MAX_SIZE/4 ];
+		struct{
+			float fCurrent;
+			float fVoltage;
+			float fPower;
+			float fFlowSpeed;
+			float fTorque;
+			float fRotateSpeed;
+		};
+	};
+	unsigned char data_end;
+}DATA;
+
+typedef struct
+{
+	unsigned char status;
+	DATA data;
+}DATA_BUF;
+
+typedef struct
+{
+	unsigned char front;
+	unsigned char rear;
+	DATA data[ DATA_MAX_NUM ];
+}DATAQUEUE;
+
 
 extern DATAQUEUE			data_queue;
 extern DATA_BUF				data_buf;
