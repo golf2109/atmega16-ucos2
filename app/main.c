@@ -47,7 +47,7 @@ void Task1(void *pdata)
 	TIMSK |= (1<<OCIE0);
 	 
 	DDRB |= 0x02;
-	uart0_init();
+	uart_init();
 	
 	while(1)
 	{
