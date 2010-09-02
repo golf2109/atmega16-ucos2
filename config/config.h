@@ -84,16 +84,10 @@ extern volatile unsigned char t5;
 #include "os_cfg.h"
 #include "uart.h"
 
-extern OS_EVENT *T2sem;
-extern OS_EVENT *Tmbox;
-
 typedef struct _msgTask
 {
 	unsigned char cnt;
 	char *s;
 }msgTask;
-
-extern msgTask T5mbox;
-extern msgTask *pMsgTask;
 
 #endif
