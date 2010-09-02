@@ -2,7 +2,7 @@
 // Target : M16
 // Crystal: 8.0000Mhz
 
-#include "app_cfg.h"
+#include "config.h"
 
 //UART0 initialize
 // desired baud rate: 9600

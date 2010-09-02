@@ -1,4 +1,4 @@
-#include "app_cfg.h"
+#include "config.h"
 
 // 定义变量
 CMDQUEUE		cmd_queue;

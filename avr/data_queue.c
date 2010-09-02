@@ -1,4 +1,4 @@
-#include "app_cfg.h"
+#include "config.h"
 
 //-----------------数据结构体-----------------------
 struct _DATA

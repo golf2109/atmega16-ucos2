@@ -1,8 +1,6 @@
 #ifndef __DATAQUEUE_H_
 #define __DATAQUEUE_H_
 
-typedef unsigned char bool;
-
 #define DATA_MAX_NUM				4
 #define DATA_MAX_NUM_MASK			0x03
 #define DATA_MAX_SIZE				24

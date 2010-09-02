@@ -2,10 +2,7 @@
 /********** OS_CPU_C.c*********************************/
 /******************************************************/
 
-#include <avr/io.h>
-#include "os_cpu.h"
-#include "os_cfg.h"
-#include "ucos_ii.h"
+#include "config.h"
 
 OS_STK *OSTaskStkInit(void (*task)(void *pd),void *p_arg,OS_STK *ptos,INT16U opt)
 {

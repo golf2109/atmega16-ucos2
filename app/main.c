@@ -1,4 +1,4 @@
-#include "app_cfg.h"
+#include "config.h"
 
 //--------------系统对象-----------------
 OS_EVENT *T2sem = (OS_EVENT *)0;
