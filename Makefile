@@ -1,26 +1,20 @@
 # Hey Emacs, this is a -*- makefile -*-
+# By	 : Gary Lee
+# E-mail : dreamer2006@163.com
+# Addr	 : Ocean University of China
 #----------------------------------------------------------------------------
 # On command line:
-#
-# make all = Make software.
-#
-# make clean = Clean out built project files.
-#
-# make coff = Convert ELF to AVR COFF.
-#
-# make extcoff = Convert ELF to AVR Extended COFF.
-#
-# make program = Download the hex file to the device, using avrdude.
-#                Please customize the avrdude settings below first!
-#
-# make debug = Start either simulavr or avarice as specified for debugging, 
-#              with avr-gdb or avr-insight as the front end for debugging.
-#
-# make filename.s = Just compile filename.c into the assembler code only.
-#
-# make filename.i = Create a preprocessed source file for use in submitting
-#                   bug reports to the GCC project.
-#
+# make all 			: Make software.
+# make clean 		: Clean out built project files.
+# make coff 		: Convert ELF to AVR COFF.
+# make extcoff 		: Convert ELF to AVR Extended COFF.
+# make program 		: Download the hex file to the device, using avrdude.
+#                	  Please customize the avrdude settings below first!
+# make debug 		: Start either simulavr or avarice as specified for debugging, 
+#              		  with avr-gdb or avr-insight as the front end for debugging.
+# make filename.s 	: Just compile filename.c into the assembler code only.
+# make filename.i 	: Create a preprocessed source file for use in submitting
+#                     bug reports to the GCC project.
 # To rebuild project do "make clean" then "make all".
 #----------------------------------------------------------------------------
 
@@ -42,21 +36,21 @@ OUTPUTDIR 	= objs
 
 export TOPDIR OUTPUTDIR MCU
 
-OS_SRC = os/os_core.c   \
-         os/os_flag.c   \
-		 os/os_mbox.c   \
-		 os/os_mem.c    \
-		 os/os_mutex.c  \
-         os/os_q.c      \
-		 os/os_sem.c    \
-		 os/os_task.c   \
+OS_SRC = os/os_core.c   	\
+         os/os_flag.c   	\
+		 os/os_mbox.c   	\
+		 os/os_mem.c    	\
+		 os/os_mutex.c  	\
+         os/os_q.c      	\
+		 os/os_sem.c    	\
+		 os/os_task.c   	\
 		 os/os_time.c 
 
 CPU_C  = avr/os_cpu_c.c    	\
          avr/avr_isr.c		\
 		 avr/data_queue.c
 		 
-CPU_A  = avr/os_cpu_a.S    \
+CPU_A  = avr/os_cpu_a.S    	\
          avr/avr_vect.S     
 		 
 APPS   = app/main.c  avr/uart.c     
@@ -326,10 +320,10 @@ clean_list :
 	$(REMOVEDIR) ./objs
 
 # Create object files directory
-$(shell mkdir $(OUTPUTDIR) 2>/dev/null)
-$(shell mkdir $(OUTPUTDIR)/os 2>/dev/null)
-$(shell mkdir $(OUTPUTDIR)/app 2>/dev/null)
-$(shell mkdir $(OUTPUTDIR)/avr 2>/dev/null)
+$(shell mkdir $(OUTPUTDIR) 		2>/dev/null)
+$(shell mkdir $(OUTPUTDIR)/os 	2>/dev/null)
+$(shell mkdir $(OUTPUTDIR)/app 	2>/dev/null)
+$(shell mkdir $(OUTPUTDIR)/avr 	2>/dev/null)
 
 # Include the dependency files.
 -include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
