@@ -1,10 +1,12 @@
-uC/OS-II 在 AVR 上的移植
+uC/OS-II在AVR MEGA16上的移植
 
 IDE: PN
-Compiler: AVR-GCC ( WinAVR 20050214 )
-Target:    ATmega16 @ 7.3728MHz
+Compiler: AVR-GCC ( WinAVR 20100110 )
+Target:    ATmega16 @ 8MHz
 
-2005-07-28
+SVN: svn checkout http://atmega16-ucos2.googlecode.com/svn/trunk/ atmega16-ucos2-read-only
+
+2010-09-02
 V1.0
           1. 由于ATmega16的RAM资源很少，所以在OS_CFG.H中关闭所有不必要的功能，同时优化代码，减少RAM占用
              在os_core.c中，有两个数组： INT8U  const  OSMapTbl[8]与 INT8U  const  OSUnMapTbl[256]，虽然声明为const类型，但是avr－gcc并不会将其放置在flash中，必须加以修改为INT8U  const  OSMapTbl[8]  PROGMEM 与INT8U  const  OSUnMapTbl[256] PROGMEM ，同样的，该文件中访问这些数组的语句也必须做相应的修改。这样的结果是速度会受到影响，但是由于仍然是查表操作，任务切换的时间还是确定的。
@@ -24,11 +26,11 @@ V1.0
              INT1的中断发送一个消息到信箱。
              由于AVR的RAM有限，移植并未考虑中断重入的问题。 
                    
-2005-07-16
+2010-09-01
 V0.9
           1. OS版本为2.76
           2. 使用Timer0的比较匹配中断为系统定时，频率为100Hz
           3. 三种临界代码保护方式均可以使用，在OS_CPU.h里直接设置即可
 
-          如果安装了WinAVR20050214，则直接运行start.bat，输入make all即可开始编译。
+          如果安装了WinAVR20100110，则直接运行start.bat，输入make all即可开始编译。
           如果需要在AVRStudio仿真，运行make extcoff后即可生成调试所需的cof文件。
