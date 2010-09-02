@@ -2,6 +2,10 @@
 文件：config.h
 用途：系统配置函数
 ************************************************/
+/*
+保存到ROM中的数据读取方法：
+pgm_read_byte(OSUnMapTbl+OSRdyGrp);
+*/
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
@@ -12,6 +16,7 @@
 #include <string.h>
 #include <math.h>
 #include <avr/eeprom.h>
+#include <avr/pgmspace.h>
 
 typedef unsigned char 				bool;
 #define false						0x00

@@ -6,7 +6,8 @@
 #include "config.h"
 
 unsigned char syserr;
-unsigned char *week_list[7]={
+unsigned char const *week_list[7] PROGMEM =
+{
 	(unsigned char *)"Sunday   ",
 	(unsigned char *)"Monday   ",
 	(unsigned char *)"Tuesday  ",
@@ -18,11 +19,12 @@ unsigned char *week_list[7]={
 
 unsigned char write_buff[8];
 unsigned char read_buff[8];
-unsigned char time_tmp[]="00:00:00";
-unsigned char data_tmp[]="2008.01.01";
+unsigned char const time_tmp[] PROGMEM ="00:00:00";
+unsigned char const data_tmp[] PROGMEM ="2010.09.01";
 unsigned char *week_tmp;
 
-unsigned char time[7]={
+unsigned char const time[7] PROGMEM =
+{
 	0x00/*秒*/,
 	0x20/*分*/,
 	0x09/*时*/,
@@ -185,7 +187,7 @@ void PCF8563_init(void)
 **************************************************************************/
 /*void Updata_time(void)
 {
-PCF8536_rd(0x02,time,7);//读取时间
+PCF8536_rd(0x02,pgm_read_byte(time),7);//读取时间
 
 time[0]=time[0]&0x7F;
 time[1]=time[1]&0x7F;

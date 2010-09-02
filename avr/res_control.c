@@ -1,7 +1,7 @@
 #include "config.h"
 
-float ResTable[6] = { 330.0, 330.0, 470.0, 470.0, 470.0, 150.0 };
-float Rev_ResTable[6] = 
+float const ResTable[6] PROGMEM = { 330.0, 330.0, 470.0, 470.0, 470.0, 150.0 };
+float const Rev_ResTable[6] PROGMEM = 
 { 
 	0.0030303, 
 	0.0030303, 

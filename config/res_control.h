@@ -16,10 +16,7 @@
 #define		DisableRes(bit);	{RES_PORT &= ~(bit);}
 #define		ResIsEnable(bit);	{((RES_PORT & (bit)) != 0);}
 
-float ResTable[6];
-float Rev_ResTable[6];
-void  ResCtrl_init(void);
-
+void ResCtrl_init(void);
 void SetRes(unsigned char mask, unsigned char value);
 
 #endif
