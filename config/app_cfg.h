@@ -13,6 +13,7 @@
 #include "ucos_ii.h"
 #include "uart.h"
 #include "data_queue.h"
+#include "cmd_queue.h"
 
 #define TASK1_PRIO					1
 #define TASK2_PRIO					2
