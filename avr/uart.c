@@ -19,14 +19,14 @@ void uart0_init(void)
  UCSRB = 0x18;
 }
 
-void uart_putchar(unsigned char x)
+void uart_putchar(char x)
 {
 	TXC_DIS();
 	UDR = x;
 	TXC_EN();
 }
 
-void uart_putstring(unsigned char *str)
+void uart_putstring(char *str)
 {
 	while(*str++)
 	{
