@@ -12,23 +12,12 @@ OS_STK Task4Stk[OS_USER_TASK_STK_SIZE] = {0};
 OS_STK Task5Stk[OS_USER_TASK_STK_SIZE] = {0};
 
 //-------------消息结构体----------------
-struct msgTask
-{
-	unsigned char cnt;
-	char *s;
-};
 
-struct msgTask T5mbox = {1,"Hello"};
-struct msgTask *pMsgTsk = &T5mbox;
+msgTask T5mbox = {1,"Hello"};
+msgTask *pMsgTask = &T5mbox;
 
-//-------------全局变量------------------
-volatile unsigned char t1 = 0;
-volatile unsigned char t2 = 0;
-volatile unsigned char t3 = 0;
-volatile unsigned char t4 = 0;
 volatile unsigned char t5 = 0;
-volatile unsigned char t6 = 0;
- 
+
 void Task1(void *pdata)
 {
 	pdata = pdata;
@@ -52,7 +41,6 @@ void Task1(void *pdata)
 	while(1)
 	{
 		OSTimeDly(OS_TICKS_PER_SEC*2);
-		t1++;
 		PORTB ^= 0x02;
 		DDRA  |= 0x01;
 		PORTA ^= 0x01;
@@ -68,20 +56,19 @@ void Task2(void *pdata)
 	MCUCR   =	EINT0_TRIGGER_MODE_DOWN;
 	GICR    =	INT_CTL_INT0_REQ;
 
-	TCCR2   =	TC2_CTC;      // CTC 模式, TOP=OCR2
-	OCR2    =	78;         // 7372800/1024/72=100
-	TCCR2   |=	TC2_CLK_DIV_1024;     // 1024分频
-	TIMSK   |=	(1<<OCIE2);     // 比较中断使能
+	TCCR2   =	TC2_CTC;      			// CTC 模式, TOP=OCR2
+	OCR2    =	78;         			// 8000000/1024/78=100
+	TCCR2   |=	TC2_CLK_DIV_1024;     	// 1024分频
+	TIMSK   |=	(1<<OCIE2);     		// 比较中断使能
 	 
 	while(1)
 	{        
 		OSSemPend(T2sem,0,&err);
 		if(err == OS_NO_ERR) 
-			t2++;
+		{}
 		if(err == OS_TIMEOUT)
-		{};
-		GIFR	|= (1<<INTF0);
-		// OSTimeDly(10);	 
+		{}
+		GIFR	|= (1<<INTF0);	 
 	}
 }
 
@@ -91,7 +78,6 @@ void Task3(void *pdata)
 	 
 	while(1)
 	{
-		t3++;
 		OSTimeDly(OS_TICKS_PER_SEC/2);
 		DDRA	|= 0x04;
 		PORTA	^= 0x04;	 
@@ -107,7 +93,6 @@ void Task4(void *pdata)
 
 	while(1)
 	{
-		t4++;
 		OSTimeDly(OS_TICKS_PER_SEC/3);
 		DDRA	|= 0x08;
 		PORTA	^= 0x08; 
@@ -117,13 +102,13 @@ void Task4(void *pdata)
 void Task5(void *pdata)
 {
 	unsigned char err = 0; 
-	struct msgTask *p = ( struct msgTask *)0;
+	msgTask *p = (msgTask *)0;
  
 	pdata=pdata;
  
 	while(1)
 	{
-		p = ( struct msgTask *)OSMboxPend(Tmbox,0,&err);
+		p = (msgTask *)OSMboxPend(Tmbox,0,&err);
 				   
 		t5 = p->cnt;
 		DDRA  |= 0x02;
@@ -135,11 +120,11 @@ int main(void)
 {
 	OSInit();
 	 
-	OSTaskCreate(Task1,0,&Task1Stk[OS_USER_TASK_STK_SIZE-1],1);
-	OSTaskCreate(Task2,0,&Task2Stk[OS_USER_TASK_STK_SIZE-1],2);
-	OSTaskCreate(Task3,0,&Task3Stk[OS_USER_TASK_STK_SIZE-1],3); 
-	OSTaskCreate(Task4,0,&Task4Stk[OS_USER_TASK_STK_SIZE-1],5); 
-	OSTaskCreate(Task5,0,&Task5Stk[OS_USER_TASK_STK_SIZE-1],4); 
+	OSTaskCreate(Task1,0,&Task1Stk[OS_USER_TASK_STK_SIZE-1],TASK1_PRIO);
+	OSTaskCreate(Task2,0,&Task2Stk[OS_USER_TASK_STK_SIZE-1],TASK2_PRIO);
+	OSTaskCreate(Task3,0,&Task3Stk[OS_USER_TASK_STK_SIZE-1],TASK3_PRIO); 
+	OSTaskCreate(Task4,0,&Task4Stk[OS_USER_TASK_STK_SIZE-1],TASK4_PRIO); 
+	OSTaskCreate(Task5,0,&Task5Stk[OS_USER_TASK_STK_SIZE-1],TASK5_PRIO); 
 
 	T2sem = OSSemCreate(0);
 	Tmbox = OSMboxCreate((void *)0); 
