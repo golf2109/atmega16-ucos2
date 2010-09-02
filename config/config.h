@@ -85,6 +85,7 @@ extern volatile unsigned char t5;
 #include "uart.h"
 #include "res_control.h"
 #include "twi.h"
+#include "pcf8563.h"
 
 typedef struct _msgTask
 {
