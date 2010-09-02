@@ -26,7 +26,6 @@
 
 # MCU name
 MCU = atmega16
-export MCU
 
 # Processor frequency.
 F_CPU = 8000000
@@ -37,8 +36,11 @@ FORMAT = ihex
 # Target file name (without extension).
 TARGET = uCOS2AVR
 
-INCPATH  = avr config os
-TOPDIR = .
+INCPATH  	= avr config os
+TOPDIR 		= .
+OUTPUTDIR 	= objs
+
+export TOPDIR OUTPUTDIR MCU
 
 OS_SRC = os/os_core.c   \
          os/os_flag.c   \
@@ -114,7 +116,7 @@ CFLAGS += $(CDEFS) $(CINCS)
 CFLAGS += -O$(OPT)
 CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 CFLAGS += -Wall -Wstrict-prototypes
-CFLAGS += -Wa,-adhlns=$(<:.c=.lst)
+CFLAGS += -Wa,-adhlns=$(<:%.c=$(OUTPUTDIR)/%.lst)
 CFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
 CFLAGS += $(CSTANDARD)
 
@@ -126,8 +128,8 @@ export CFLAGS
 #             for use in COFF files, additional information about filenames
 #             and function names needs to be present in the assembler source
 #             files -- see avr-libc docs [FIXME: not yet described there]
-ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs 
-
+ASFLAGS = -Wa,-adhlns=$(<:%.S=$(OUTPUTDIR)/%.lst),-gstabs 
+export ASFLAGS
 #---------------- Library Options ----------------
 # Minimalistic printf version
 PRINTF_LIB_MIN = -Wl,-u,vfprintf -lprintf_min
@@ -198,10 +200,10 @@ MSG_CLEANING 		= Cleaning project:
 
 export MSG_COMPILING MSG_ASSEMBLING
 # Define all object files.
-OBJ = $(SRC:.c=.o) $(ASRC:.S=.o) 
+OBJ = $(SRC:%.c=$(OUTPUTDIR)/%.o) $(ASRC:%.S=$(OUTPUTDIR)/%.o) 
 
 # Define all listing files.
-LST = $(SRC:.c=.lst) $(ASRC:.S=.lst) 
+LST = $(SRC:%.c=$(OUTPUTDIR)/%.lst) $(ASRC:%.S=$(OUTPUTDIR)/%.lst) 
 
 # Compiler flags to generate dependency files.
 GENDEPFLAGS = -MD -MP -MF .dep/$(@F).d
@@ -237,6 +239,7 @@ end:
 # Display size of file.
 HEXSIZE = $(SIZE) --target=$(FORMAT) $(TARGET).hex
 ELFSIZE = $(SIZE) -A $(TARGET).elf
+ELFSIZE2 = $(SIZE) --mcu=$(MCU) --format=avr $(TARGET).elf
 AVRMEM = avr-mem.sh $(TARGET).elf $(MCU)
 
 sizebefore:
@@ -244,7 +247,7 @@ sizebefore:
 	$(AVRMEM) 2>/dev/null; echo; fi
 
 sizeafter:
-	@if test -f $(TARGET).elf; then echo; echo $(MSG_SIZE_AFTER); $(ELFSIZE); \
+	@if test -f $(TARGET).elf; then echo; echo $(MSG_SIZE_AFTER); $(ELFSIZE); $(ELFSIZE2)\
 	$(AVRMEM) 2>/dev/null; echo; fi
 	
 # Display compiler version information.
@@ -313,11 +316,19 @@ clean_list :
 	$(REMOVE) $(TARGET).map
 	$(REMOVE) $(TARGET).sym
 	$(REMOVE) $(TARGET).lss
-	$(REMOVE) $(OBJ)
-	$(REMOVE) $(LST)
+	$(REMOVE) $(SRC:%.c=$(OUTPUTDIR)/%.o)
+	$(REMOVE) $(SRC:%.c=$(OUTPUTDIR)/%.lst)
 	$(REMOVE) $(SRC:.c=.s)
 	$(REMOVE) $(SRC:.c=.d)
+	$(REMOVE) $(SRC:.c=.i)
 	$(REMOVEDIR) .dep
+	$(REMOVEDIR) ./objs
+
+# Create object files directory
+$(shell mkdir $(OUTPUTDIR) 2>/dev/null)
+$(shell mkdir $(OUTPUTDIR)/os 2>/dev/null)
+$(shell mkdir $(OUTPUTDIR)/app 2>/dev/null)
+$(shell mkdir $(OUTPUTDIR)/avr 2>/dev/null)
 
 # Include the dependency files.
 -include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
