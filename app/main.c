@@ -47,12 +47,16 @@ void Task1(void *pdata)
 	TIMSK |= (1<<OCIE0);
 	 
 	DDRB |= 0x02;
-
+	uart0_init();
+	
 	while(1)
 	{
-		OSTimeDly(2);
+		OSTimeDly(OS_TICKS_PER_SEC*2);
 		t1++;
 		PORTB ^= 0x02;
+		DDRA  |= 0x01;
+		PORTA ^= 0x01;
+		uart_putstring("Task1");
 	}
 }
 
@@ -88,10 +92,9 @@ void Task3(void *pdata)
 	while(1)
 	{
 		t3++;
-		OSTimeDly(4);
+		OSTimeDly(OS_TICKS_PER_SEC/2);
 		DDRA	|= 0x04;
-		PORTA	|= 0x04;
-		PORTA	&=~0x04;	 
+		PORTA	^= 0x04;	 
 	}
 }
 
@@ -105,10 +108,9 @@ void Task4(void *pdata)
 	while(1)
 	{
 		t4++;
-		OSTimeDly(8);
+		OSTimeDly(OS_TICKS_PER_SEC/3);
 		DDRA	|= 0x08;
-		PORTA	|= 0x08;
-		PORTA	&=~0x08;	 
+		PORTA	^= 0x08; 
 	}
 }
 
@@ -123,7 +125,9 @@ void Task5(void *pdata)
 	{
 		p = ( struct msgTask *)OSMboxPend(Tmbox,0,&err);
 				   
-		t5 = p->cnt;	 
+		t5 = p->cnt;
+		DDRA  |= 0x02;
+		PORTA ^= 0x02;		
 	}
 }
 

@@ -3,6 +3,7 @@
 
 #include <avr/io.h>
 #include "ucos_ii.h"
+#include "uart.h"
 
 struct msgTask;
 

@@ -56,7 +56,7 @@ CPU_C  = avr/os_cpu_c.c    \
 CPU_A  = avr/os_cpu_a.S    \
          avr/avr_vect.S     
 		 
-APPS   = app/main.c       
+APPS   = app/main.c  avr/uart.c     
 
 # List C source files here. (C dependencies are automatically generated.)
 SRC = $(OS_SRC)     \
