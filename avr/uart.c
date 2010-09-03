@@ -50,6 +50,9 @@ void uart_init(void)
 
 void uart_putchar(char x)
 {
+	if(x == '\r')
+		uart_putchar(0x09);
+		
 	while(!(UCSRA & (1<<UDRE))); 					//×î¼òµ¥µÄ·¢ËÍº¯Êý
 	UDR = x;
 }
@@ -73,6 +76,57 @@ void uart_putnstring (char *p, unsigned char len) 	//»ùÓÚ¼òµ¥·½Ê½µÄ·¢ËÍÖ¸¶¨³¤¶È×
 		uart_putchar(p[i]);
 	}
 }
+
+void com_printf(const char* fmt, ...)  
+{  
+    const char* s;  
+    int d;  
+    char buf[16];  
+    va_list ap;  
+    va_start(ap, fmt);   							// ½«apÖ¸Ïòfmt£¨¼´¿É±ä²ÎÊýµÄµÚÒ»¸ö?ÏÂÒ»¸ö£¿£©  
+    while (*fmt)  
+    {  
+        if (*fmt != '%')  
+        {  
+            uart_putchar(*fmt++);   				// Õý³£·¢ËÍ  
+            continue;     
+        }  
+        switch (*++fmt) 							// next %  
+        {  
+			case 's':  
+				s = va_arg(ap, const char*); 		// ½«apÖ¸ÏòÕß×ª³Échar*ÐÍ£¬²¢·µ»ØÖ®  
+				for (; *s; s++)  
+				{
+					uart_putchar(*s);  
+				}
+				break;  
+				
+			case 'x':  
+				d = va_arg(ap,int);     			// ½«apÖ¸ÏòÕß×ª³ÉintÐÍ£¬²¢·µ»ØÖ®  
+				itoa(d, buf, 16);         			// ½«ÕûÐÍdÒÔ16½øÖÆ×ªµ½bufÖÐ  
+				for (s = buf; *s; s++) 
+				{
+					uart_putchar(*s); 
+				}
+				break;
+				
+			case 'd':  
+				d = va_arg(ap,int);  
+				itoa(d, buf, 10);         			// ½«ÕûÐÍdÒÔ10½øÖÆ×ªµ½bufÖÐ  
+				for (s = buf; *s; s++)  
+                {
+					uart_putchar(*s);  
+				}
+				break; 
+				
+			default:  
+				uart_putchar(*fmt);  
+				break;  
+		}  
+        fmt++;  
+    }  
+    va_end(ap);  
+} 
 
 void com_putchar (char x)						
 {

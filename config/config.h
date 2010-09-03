@@ -17,6 +17,8 @@ pgm_read_byte(OSUnMapTbl+OSRdyGrp);
 #include <math.h>
 #include <avr/eeprom.h>
 #include <avr/pgmspace.h>
+#include <stdarg.h>  
+#include <stdlib.h>     
 
 typedef unsigned char 				bool;
 #define false						0x00
@@ -40,12 +42,17 @@ typedef unsigned char 				bool;
 
 #define _NOP() 						asm("nop")
 
+//-----------------任务优先级---------------
 #define TASK1_PRIO					1
 #define TASK2_PRIO					2
 #define TASK3_PRIO					3
 #define TASK4_PRIO					4
 #define TASK5_PRIO					5
 
+//-----------------GCC attribute------------
+#define UNUSED 						__attribute__((unused))
+
+//----------------常用宏--------------------
 #define CLK_IO_DIV_NO				0
 #define CLK_IO_DIV_1				1
 #define CLK_IO_DIV_8				2
@@ -82,7 +89,6 @@ typedef unsigned char 				bool;
 #define INT_CTL_INT1_REQ			(1<<INT1)
 #define INT_CTL_INT2_REQ			(1<<INT2)
 
-extern volatile unsigned char t5;
 //-------------自定义头文件------------
 #include "ucos_ii.h"
 #include "data_queue.h"
@@ -93,11 +99,5 @@ extern volatile unsigned char t5;
 #include "res_control.h"
 #include "twi.h"
 #include "pcf8563.h"
-
-typedef struct _msgTask
-{
-	unsigned char cnt;
-	char *s;
-}msgTask;
 
 #endif

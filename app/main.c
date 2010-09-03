@@ -12,6 +12,11 @@ OS_STK Task4Stk[OS_USER_TASK_STK_SIZE] = {0};
 OS_STK Task5Stk[OS_USER_TASK_STK_SIZE] = {0};
 
 //-------------消息结构体----------------
+typedef struct _msgTask
+{
+	unsigned char cnt;
+	char *msg;
+}msgTask;
 
 msgTask T5mbox = {1,"Hello"};
 msgTask *pMsgTask = &T5mbox;
@@ -21,16 +26,14 @@ volatile unsigned char t5 = 0;
 void Task1(void *pdata)
 {
 	pdata = pdata;
-	char *string = "task1";
-	int count = 0x30;
-	
+
 	TIMSK &= ~((1<<OCIE0)|(1<<TOIE0));
 	 
 	#if OS_TICKS_PER_SEC <= (F_CPU/1024/256)
 	 #error "OS_TICKS_PER_SEC < (F_CPU/1024/256)"
 	#endif
 
-	OCR0 = F_CPU/1024/OS_TICKS_PER_SEC;
+	OCR0  = F_CPU/1024/OS_TICKS_PER_SEC;
 	TCNT0 = 0;
 
 	TCCR0 = TC0_CTC|CLK_IO_DIV_1024;
@@ -45,12 +48,11 @@ void Task1(void *pdata)
 		PORTB ^= 0x02;
 		DDRA  |= 0x01;
 		PORTA ^= 0x01;
-		com_putstring(string, 5);
-		com_putstring((char *)&count, 2);
+		com_putstring(pMsgTask->msg, 5);
 		com_putchar(0x0A);
 		com_putchar(0x0D);
-
-		count++;
+		com_printf("This is task1!\n");
+		
 		OSTimeDly(OS_TICKS_PER_SEC/3);
 	}
 }
@@ -150,7 +152,7 @@ void IsrEint0(void)
 void IsrEint1(void)
 {
 	pMsgTask->cnt=255-t5;
-	pMsgTask->s="uCOS2";
+	pMsgTask->msg="uCOS2";
 	
 	OSMboxPost(Tmbox, (void *)pMsgTask);
 }

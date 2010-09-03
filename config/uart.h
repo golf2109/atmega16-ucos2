@@ -49,5 +49,6 @@ void com_putstring (char *p,unsigned char len);
 void com_putcommand(CMD *pCmd);
 void com_putdata(DATA *pData);
 void com_put_ackcommand(void);
+void com_printf(const char* fmt, ...);
 
 #endif
