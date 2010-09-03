@@ -29,25 +29,22 @@
 
 typedef struct
 {
-	unsigned char T_head;
-	unsigned char T_tail;
-	unsigned char T_buf[TBUF_SIZE];
-	unsigned char T_disable;
-}siocirqueue;
+	unsigned char head;
+	unsigned char tail;
+	unsigned char buf[TBUF_SIZE];
+	unsigned char disable;
+}SiocirQueue;
 
-extern siocirqueue RTbuf;
+extern SiocirQueue tx_buf;
 
 void uart_init(void);
 void uart_putchar(char x);
 void uart_putstring(char *str);
 void uart_putnstring (char *p, unsigned char len) ;
-void Com_putchar (char x);
-void Com_putstring (char *p,unsigned char len);
-void Com_putCommand(CMD *pCmd);
-void Com_putData(DATA *pData);
-void Com_putAckCommand(void);
-void Tbuf_init(void);
-bool Tbuf_empty(void);
-bool Tbuf_full(void);
+void com_putchar (char x);
+void com_putstring (char *p,unsigned char len);
+void com_putcommand(CMD *pCmd);
+void com_putdata(DATA *pData);
+void com_put_ackcommand(void);
 
 #endif

@@ -45,10 +45,10 @@ void Task1(void *pdata)
 		PORTB ^= 0x02;
 		DDRA  |= 0x01;
 		PORTA ^= 0x01;
-		Com_putstring(string, 5);
-		Com_putstring((char *)&count, 2);
-		Com_putchar(0x0A);
-		Com_putchar(0x0D);
+		com_putstring(string, 5);
+		com_putstring((char *)&count, 2);
+		com_putchar(0x0A);
+		com_putchar(0x0D);
 
 		count++;
 		OSTimeDly(OS_TICKS_PER_SEC/3);

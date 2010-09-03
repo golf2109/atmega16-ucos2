@@ -1,10 +1,27 @@
-//ICC-AVR application builder : 2010-9-2 ÉÏÎç 12:37:32
+// AVR application builder : 2010-9-2 ÉÏÎç 12:37:32
 // Target : M16
 // Crystal: 8.0000Mhz
 
 #include "config.h"
 
-siocirqueue RTbuf;
+SiocirQueue tx_buf;
+
+static void tx_buf_init(void)
+{
+	tx_buf.head 	 = 0;
+	tx_buf.tail  	 = 0;
+	tx_buf.disable  = 1;							//»º³åÇø²»¿ÉÓÃ
+}
+
+static bool tx_buf_is_empty(void)					//¼ì²â·¢ËÍ»º³åÇøÊÇ·ñÎª¿Õ£¬1Îª¿Õ£¬0Îª·Ç¿Õ
+{
+	return (tx_buf.tail == tx_buf.head);
+}
+
+static bool tx_buf_is_full(void)					//¼ì²â·¢ËÍ»º³åÇøÊÇ·ñÒÑÂú£¬1ÎªÂú£¬0Îª·ÇÂú
+{
+	return (((tx_buf.tail + 1) & BIT_MASK) == tx_buf.head);
+}
 
 //UART0 initialize
 // desired baud rate: 9600
@@ -12,7 +29,7 @@ siocirqueue RTbuf;
 static void uart_set_baudrate(unsigned int baudrate)
 {
 	unsigned int tmp;
-	tmp= F_CPU/baudrate/16-1;
+	tmp= F_CPU/baudrate/16-1;						//F_CPU was defined in Makefile
 
 	UBRRH=(unsigned char)(tmp>>8);					//set baud rate lo
 	UBRRL=(unsigned char)tmp;						//set baud rate hi
@@ -26,7 +43,7 @@ void uart_init(void)
 	UCSRB |= _BV(RXEN)  | _BV(TXEN)  | _BV(RXCIE) | _BV(TXCIE);//Ê¹ÄÜ·¢ËÍ£¬½ÓÊÕ£¬·¢ËÍÖĞ¶Ï£¬½ÓÊÕÖĞ¶Ï
 	
 	uart_set_baudrate(SYS_BAUDRATE);				//ÉèÖÃ²¨ÌØÂÊ£¬9600
-	Tbuf_init();									//Çå¿Õ½ÓÊÕ»º³åÇø
+	tx_buf_init();									//Çå¿Õ½ÓÊÕ»º³åÇø
 }
 
 void uart_putchar(char x)
@@ -55,27 +72,27 @@ void uart_putnstring (char *p, unsigned char len) 	//»ùÓÚ¼òµ¥·½Ê½µÄ·¢ËÍÖ¸¶¨³¤¶È×
 	}
 }
 
-void Com_putchar (char x)						
+void com_putchar (char x)						
 {
-	if(Tbuf_full())									//Èô·¢ËÍ»º³åÇøÒÑÂú£¬Ö±½Ó·µ»Ø
-		return;
+	if(tx_buf_is_full())							//Èô·¢ËÍ»º³åÇøÒÑÂú£¬Ö±½Ó·µ»Ø
+		return;										//ÊÇÖ±½Ó·µ»Ø»¹ÊÇÔÚÕâÀïµÈ´ı£¿£¿£¿£¿£¿£¿
 
 	TXC_DIS();										//¹Ø±Õ·¢ËÍÍê³ÉÖĞ¶Ï
-	if (RTbuf.T_disable)							//Èç¹û·¢ËÍ»º³åÇøÊÇ²»¿ÉÓÃµÄ
+	if (tx_buf.disable)								//Èç¹û·¢ËÍ»º³åÇøÊÇ²»¿ÉÓÃµÄ
 	{
 		while(!(UCSRA & (1<<UDRE))); 				//Èç¹û½ÓÊÕÊı¾İ¼Ä´æÆ÷²»Îª¿ÕÔòµÈ´ı
 		UDR = x;									//°Ñµ±Ç°Òª·¢ËÍµÄÊı¾İÏÈ·¢³öÈ¥
-		RTbuf.T_disable = 0;						//ÖÃ·¢ËÍ»º³åÇø¿ÉÓÃ
+		tx_buf.disable = 0;							//ÖÃ·¢ËÍ»º³åÇø¿ÉÓÃ
 	}
 	else
 	{
-		RTbuf.T_buf[RTbuf.T_tail]=x;				//½«·¢ËÍµÄÊı¾İ·Åµ½»º³åÇøÎ²²¿
-		RTbuf.T_tail=(RTbuf.T_tail+1) & BIT_MASK;	//ÒÆ¶¯»º³åÇøÎ²²¿Ö¸Õë
+		tx_buf.buf[tx_buf.tail]=x;					//½«·¢ËÍµÄÊı¾İ·Åµ½»º³åÇøÎ²²¿
+		tx_buf.tail=(tx_buf.tail+1) & BIT_MASK;		//ÒÆ¶¯»º³åÇøÎ²²¿Ö¸Õë
 	}
 	TXC_EN();										//´ò¿ª·¢ËÍÍê³ÉÖĞ¶Ï
 }
 
-void Com_putstring (char *p,unsigned char len) 
+void com_putstring (char *p,unsigned char len) 
 {
 	unsigned char i;
 	if (!len)
@@ -83,45 +100,28 @@ void Com_putstring (char *p,unsigned char len)
 
 	for(i = 0; i < len; i++)
 	{
-		Com_putchar(p[i]);
+		com_putchar(p[i]);
 	}
 }
 
-void Com_putCommand(CMD *pCmd)
+void com_putcommand(CMD *pCmd)
 {
-	Com_putchar(FRAME_HEAD);
-	Com_putstring((char*)pCmd, pCmd->para_size + 2);
+	com_putchar(FRAME_HEAD);
+	com_putstring((char*)pCmd, pCmd->para_size + 2);
 }
 
-void Com_putData(DATA *pData)
+void Com_putdata(DATA *pData)
 {
-	Com_putchar(FRAME_HEAD);
-	Com_putstring((char*)pData, DATA_LENGTH);
+	com_putchar(FRAME_HEAD);
+	com_putstring((char*)pData, DATA_LENGTH);
 }
 
-void Com_putAckCommand(void)
+void Com_put_ackcommand(void)
 {
 	CMD cmd;
 	cmd.cmd_code 	= 0x01;
 	cmd.para_size 	= 0;
-	Com_putCommand(&cmd);
-}
-
-void Tbuf_init(void)
-{
-	RTbuf.T_head 	 = 0;
-	RTbuf.T_tail  	 = 0;
-	RTbuf.T_disable  = 1;
-}
-
-bool Tbuf_empty(void)							//¼ì²â·¢ËÍ»º³åÇøÊÇ·ñÎª¿Õ£¬1Îª¿Õ£¬0Îª·Ç¿Õ
-{
-	return (RTbuf.T_tail == RTbuf.T_head);
-}
-
-bool Tbuf_full(void)							//¼ì²â·¢ËÍ»º³åÇøÊÇ·ñÒÑÂú£¬1ÎªÂú£¬0Îª·ÇÂú
-{
-	return (((RTbuf.T_tail + 1) & BIT_MASK) == RTbuf.T_head);
+	com_putcommand(&cmd);
 }
 
 ISR(USART_RXC_vect)								//½ÓÊÕÍê³ÉÖĞ¶Ï·şÎñ×Ó³ÌĞò
@@ -137,13 +137,13 @@ ISR(USART_RXC_vect)								//½ÓÊÕÍê³ÉÖĞ¶Ï·şÎñ×Ó³ÌĞò
 
 ISR(USART_TXC_vect)								//·¢ËÍÍê³ÉÖĞ¶Ï·şÎñ×Ó³ÌĞò
 {
-	if (!Tbuf_empty())							//ÅĞ¶Ï·¢ËÍ»º³åÇøÊÇ·ñÎª¿Õ£¬¿ÕÔòÖÃT_disable=1
+	if (!tx_buf_is_empty())						//ÅĞ¶Ï·¢ËÍ»º³åÇøÊÇ·ñÎª¿Õ£¬¿ÕÔòÖÃdisable=1
 	{
-		UDR = RTbuf.T_buf[RTbuf.T_head];		//´Ó·¢ËÍ»º³åÇøµÄÍ·²¿¿ªÊ¼·¢ËÍ
-		RTbuf.T_head = (RTbuf.T_head+1) & BIT_MASK;//µ÷ÕûÍ·²¿Î»ÖÃ
+		UDR = tx_buf.buf[tx_buf.head];			//´Ó·¢ËÍ»º³åÇøµÄÍ·²¿¿ªÊ¼·¢ËÍ
+		tx_buf.head = (tx_buf.head+1) & BIT_MASK;//µ÷ÕûÍ·²¿Î»ÖÃ
 	}
 	else 
 	{
-		RTbuf.T_disable = 1;					//ÖÃÎ»»º³åÇø²»¿ÉÓÃ
+		tx_buf.disable = 1;						//ÖÃÎ»»º³åÇø²»¿ÉÓÃ
 	}
 }
