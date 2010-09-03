@@ -21,8 +21,8 @@ pgm_read_byte(OSUnMapTbl+OSRdyGrp);
 #include <stdlib.h>     
 
 typedef unsigned char 				bool;
-#define false						0x00
-#define true						0x01
+#define FALSE						0x00
+#define TRUE						0x01
 #define ENABLE						0
 #define DISABLE						1
 
@@ -115,5 +115,6 @@ typedef unsigned char 				bool;
 #include "twi.h"
 #include "pcf8563.h"
 #include "board.h"
+#include "adc.h"
 
 #endif

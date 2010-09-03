@@ -59,7 +59,8 @@ APPS   = app/main.c  		\
 		 avr/res_control.c 	\
 		 avr/twi.c			\
 		 avr/pcf8563.c		\
-		 avr/board.c
+		 avr/board.c		\
+		 avr/adc.c
 		 
 # List C source files here. (C dependencies are automatically generated.)
 SRC = $(OS_SRC)     \
