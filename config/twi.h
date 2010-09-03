@@ -6,9 +6,9 @@
 #define __TWI_H__
 
 void twi_init(void);
-void i2cstart(void);
-unsigned char i2cwt(unsigned char data);
-unsigned char i2crd(void);
-void i2cstop(void);
+void i2c_start(void);
+unsigned char i2c_write(unsigned char data);
+unsigned char i2c_read(void);
+void i2c_stop(void);
 
 #endif

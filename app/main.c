@@ -21,7 +21,7 @@ typedef struct _MsgTask
 MsgTask T5mbox 		= {1,"Hello"};
 MsgTask *pMsgTask 	= &T5mbox;
 
-volatile unsigned char t5 = 0;
+volatile unsigned short t5 = 0;
 
 void Task1(void *pdata)
 {
@@ -32,9 +32,6 @@ void Task1(void *pdata)
 		PA_OUT_REV(LED1);
 		
 		com_putstring(pMsgTask->msg, 5);
-		com_putchar(0x0A);
-		com_putchar(0x0D);
-		com_printf("This is task1!\n");
 		
 		OSTimeDly(OS_TICKS_PER_SEC/3);
 	}
@@ -59,11 +56,15 @@ void Task2(void *pdata)
 void Task3(void *pdata)
 {
 	pdata = pdata;
-	 
+	adc_init();
+	
 	while(1)
 	{
+		adc_switch_channel(ADC_VOLTAGE);
+		START_ADC();
 		OSTimeDly(OS_TICKS_PER_SEC/2);
-		PA_OUT_REV(LED4);	 
+		t5 = ADC;
+		com_printf("ADC = %d\n", t5);
 	}
 }
 

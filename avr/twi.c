@@ -16,14 +16,14 @@
 **************************************************************************/
 void twi_init(void)
 {
-	TWCR = 0x00; //disable twi
-	TWBR = 0x20; //set bit rate
-	TWSR = 0x00; //set prescale
-	TWAR = 0x00; //set slave address
-	TWCR = (1<<TWEN); //enable twi
+	TWCR = 0x00; 		//disable twi
+	TWBR = 0x20; 		//set bit rate
+	TWSR = 0x00; 		//set prescale
+	TWAR = 0x00; 		//set slave address
+	TWCR = (1<<TWEN); 	//enable twi
 }
 /*************************************************************************
-** 函数名称: i2cstart(void)
+** 函数名称: i2c_start(void)
 ** 功能描述: i2c通信开始
 ** 输　入: 
 ** 输出	 : 
@@ -32,13 +32,13 @@ void twi_init(void)
 ** 说明：
 ** 注意：
 **************************************************************************/
-void i2cstart(void)
+void i2c_start(void)
 { 
 	TWCR = (1<<TWINT) | (1<<TWSTA) | (1<<TWEN); 
 	while (!(TWCR & (1<<TWINT)));
 }
 /*************************************************************************
-** 函数名称: unsigned char i2cwt(unsigned char data)
+** 函数名称: unsigned char i2c_write(unsigned char data)
 ** 功能描述: i2c写数据,返回TWI状态
 ** 输　入: 
 ** 输  出: TWI状态
@@ -47,16 +47,16 @@ void i2cstart(void)
 ** 说明：
 ** 注意：
 **************************************************************************/
-unsigned char i2cwt(unsigned char data)
+unsigned char i2c_write(unsigned char data)
 { 
 	TWDR = data;
 	TWCR = (1<<TWINT) | (1<<TWEN);
 	while (!(TWCR & (1<<TWINT)));
 	_NOP();
-	return(TWSR&0b11111000);
+	return(TWSR & 0b11111000);
 }
 /*************************************************************************
-** 函数名称: unsigned char i2crd(void)
+** 函数名称: unsigned char i2c_read(void)
 ** 功能描述: i2c读数据
 ** 输　入: 
 ** 输出	 : 读取的数据
@@ -65,14 +65,14 @@ unsigned char i2cwt(unsigned char data)
 ** 说明：
 ** 注意：
 **************************************************************************/
-unsigned char i2crd(void)
+unsigned char i2c_read(void)
 {
 	TWCR= (1<<TWINT) | (1<<TWEA) | (1<<TWEN);
 	while (!(TWCR & (1<<TWINT)));
 	return(TWDR);
 }
 /*************************************************************************
-** 函数名称: i2cstop(void)
+** 函数名称: i2c_stop(void)
 ** 功能描述: i2c停止
 ** 输　入: 
 ** 输出	 : 
@@ -81,7 +81,7 @@ unsigned char i2crd(void)
 ** 说明：
 ** 注意：
 **************************************************************************/
-void i2cstop(void)
+void i2c_stop(void)
 { 
-	TWCR = (1<<TWINT) | (1<<TWSTO) | (1<<TWEN);
+	TWCR = (1<<TWINT) | (1<<TWSTO) | (1<<TWEN);//写1清0
 }

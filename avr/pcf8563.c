@@ -19,20 +19,22 @@ unsigned char const *week_list[7] PROGMEM =
 
 unsigned char write_buff[8];
 unsigned char read_buff[8];
-unsigned char const time_tmp[] PROGMEM ="00:00:00";
-unsigned char const data_tmp[] PROGMEM ="2010.09.01";
+unsigned char const time_tmp[] ="00:00:00";
+unsigned char const data_tmp[] ="2010.09.01";
 unsigned char *week_tmp;
+
 
 unsigned char const time[7] PROGMEM =
 {
-	0x00/*秒*/,
-	0x20/*分*/,
-	0x09/*时*/,
-	0x08/*天*/,
-	0x02/*星期*/,
-	0x06/*月/世纪*/,
-	0x10/*年*/
+	0x00,		///*秒		
+	0x20,		///*分		
+	0x09,		///*时		
+	0x08,		///*天		
+	0x02,		///*星期		
+	0x06,		///*月/世纪	
+	0x10		///*年		
 };
+
 /*************************************************************************
 ** 函数名称: clear(unsigned char *p,unsigned char num)
 ** 功能描述: 清除指定区域指定长度的数据
@@ -45,16 +47,16 @@ unsigned char const time[7] PROGMEM =
 **************************************************************************/
 void clear(unsigned char *p,unsigned char num)
 {
-	for(;num>0;num--)
+	for(; num > 0; num--)
 	{
-		*p=0;
+		*p = 0;
 		p++;
 	}
 }
 /*************************************************************************
-** 函数名称: PCF8536_wt(unsigned int add,unsigned char data)
+** 函数名称: PCF8536_wt(unsigned int addr,unsigned char data)
 ** 功能描述: 向PCF8563指定地址写入一条数据
-** 输　入: unsigned int add    ：高八位为器件地址，低八位为内部寄存器地址
+** 输　入: unsigned int addr    ：高八位为器件地址，低八位为内部寄存器地址
 unsigned char data  ：需要写入的数据
 ** 输出	 : 
 ** 全局变量: 
@@ -62,27 +64,27 @@ unsigned char data  ：需要写入的数据
 ** 说明：
 ** 注意：
 **************************************************************************/
-void PCF8536_wt(unsigned int add,unsigned char data)
+void pcf8536_write(unsigned int addr, unsigned char data)
 {
 	unsigned char t;
-	t=add>>8;
-	t<<=1;
-	i2cstart();
-	if(i2cwt(W_ADD_COM+t)==SLAW)
+	t = addr>>8;
+	t <<= 1;
+	i2c_start();
+	if(i2c_write(W_ADD_COM+t) == SLAW)
 	{
-		i2cwt(add);
-		i2cwt(data);
+		i2c_write(addr);
+		i2c_write(data);
 	}
 	else 
 	{
 		syserr=ERR_SLAW;
 	}
-	i2cstop();
+	i2c_stop();
 }
 /*************************************************************************
-** 函数名称: PCF8536_wt_p(unsigned int add,unsigned char *p,unsigned char num)
+** 函数名称: PCF8536_wt_p(unsigned int addr,unsigned char *p,unsigned char num)
 ** 功能描述: 向PCF8563地址连续的寄存器写入系列数据
-** 输　入: unsigned int add    ：高八位为器件地址，低八位为内部寄存器地址
+** 输　入: unsigned int addr    ：高八位为器件地址，低八位为内部寄存器地址
 unsigned char *p    ：需要写入的数据域的起始地址
 unsigned char num   ：写入数据的个数
 ** 输出	 : 
@@ -91,18 +93,19 @@ unsigned char num   ：写入数据的个数
 ** 说明：写入数据区域为地址连续的寄存器
 ** 注意：
 **************************************************************************/
-void PCF8536_wt_p(unsigned int add,unsigned char *p,unsigned char num)
+void pcf8536_write_p(unsigned int addr,unsigned char *p,unsigned char num)
 {
 	unsigned char t;
-	t=add>>8;
-	t<<=1;
-	i2cstart();
-	if(i2cwt(W_ADD_COM+t)==SLAW)
+	t = addr>>8;
+	t <<= 1;
+	i2c_start();
+	
+	if(i2c_write(W_ADD_COM+t)==SLAW)
 	{
-		i2cwt(add);
+		i2c_write(addr);
 		for(;num>0;num--)
 		{
-			i2cwt(*p);
+			i2c_write(*p);
 			p++;
 			_NOP();
 		}
@@ -111,12 +114,12 @@ void PCF8536_wt_p(unsigned int add,unsigned char *p,unsigned char num)
 	{
 		syserr=ERR_SLAW;
 	}
-	i2cstop();
+	i2c_stop();
 }
 /*************************************************************************
-** 函数名称: PCF8536_rd(unsigned int add,unsigned char *p,unsigned char num)
+** 函数名称: PCF8536_rd(unsigned int addr,unsigned char *p,unsigned char num)
 ** 功能描述: 读PCF8563
-** 输　入: unsigned int add    ：高八位为器件地址，低八位为内部寄存器地址
+** 输　入: unsigned int addr    ：高八位为器件地址，低八位为内部寄存器地址
 unsigned char *p    ：读出的数据存放地址的起始地址
 unsigned char num   ：读出数据的个数
 ** 输出	 : 
@@ -125,25 +128,27 @@ unsigned char num   ：读出数据的个数
 ** 说明：
 ** 注意：
 **************************************************************************/
-void PCF8536_rd(unsigned int add,unsigned char *p,unsigned char num)
+void pcf8536_read(unsigned int addr,unsigned char *p,unsigned char num)
 {
 	unsigned char t;
-	t=add>>8;
-	t<<=1;
-	i2cstart();
-	if(i2cwt(W_ADD_COM+t)==SLAW)
+	
+	t = addr >> 8;
+	t <<= 1;
+	i2c_start();
+	
+	if(i2c_write(W_ADD_COM + t) == SLAW)
 	{
-		i2cwt(add);
+		i2c_write(addr);
 	}
 	else 
 	{
 		syserr=ERR_SLAW;
 	}
 
-	i2cstart();
-	if(i2cwt(R_ADD_COM+t)==SLAW)
+	i2c_start();
+	if(i2c_write(R_ADD_COM+t) == SLAW)
 	{
-		i2cwt(add);
+		i2c_write(addr);
 	}
 	else 
 	{
@@ -152,12 +157,12 @@ void PCF8536_rd(unsigned int add,unsigned char *p,unsigned char num)
 
 	for(;num>0;num--)
 	{
-		*p=i2crd();
+		*p=i2c_read();
 		p++;
 	} 
 }
 /*************************************************************************
-** 函数名称: PCF8563_init(void)
+** 函数名称: pcf8563_init(void)
 ** 功能描述: PCF8563初始化
 ** 输　入: 
 ** 输出	 : 
@@ -166,10 +171,10 @@ void PCF8536_rd(unsigned int add,unsigned char *p,unsigned char num)
 ** 说明：
 ** 注意：
 **************************************************************************/
-void PCF8563_init(void)
+void pcf8563_init(void)
 {
-	clear(write_buff,8);
-	clear(read_buff,8);
+	memset(write_buff,0, 8);
+	memset(read_buff, 0, 8);
 
 	//PCF8536_wt(0x00,0x20);//写寄存器1，停止计时
 	//PCF8536_wt_p(0x02,time,7);//设定时间

@@ -1,6 +1,6 @@
 /************************************************
-文件：PCF8563.h
-用途：PCF8563函数头文件
+文件：pcf8563.h
+用途：pcf8563函数头文件
 注意：系统时钟8M
 ************************************************/
 #ifndef __PCF8563_H__
@@ -14,11 +14,10 @@
 #define ERR_SLAW 	0x01
 
 void clear(unsigned char *p,unsigned char num);
-
-void PCF8563_init(void);
-void PCF8536_wt(unsigned int add,unsigned char data);
-void PCF8536_wt_p(unsigned int add,unsigned char *p,unsigned char num);
-void PCF8536_rd(unsigned int add,unsigned char *p,unsigned char num);
+void pcf8563_init(void);
+void pcf8536_write(unsigned int add,unsigned char data);
+void pcf8536_write_p(unsigned int add,unsigned char *p,unsigned char num);
+void pcf8536_read(unsigned int add,unsigned char *p,unsigned char num);
 void Updata_time(void);
 
 #endif
