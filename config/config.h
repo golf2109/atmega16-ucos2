@@ -89,6 +89,21 @@ typedef unsigned char 				bool;
 #define INT_CTL_INT1_REQ			(1<<INT1)
 #define INT_CTL_INT2_REQ			(1<<INT2)
 
+//-------------端口设置----------------
+#define PA_OUT_REV(x);				{DDRA  |= ((x) & 0x07); PORTA ^= ((x) & 0x07);}
+#define PA_OUT_H(x);				{DDRA  |= ((x) & 0x07); PORTA |= ((x) & 0x07);}
+#define PA_OUT_L(x);				{DDRA  |= ((x) & 0x07); PORTA &=~((x) & 0x07);}
+
+//-------------LED灯-------------------
+#define LED1						0
+#define LED2						1
+#define LED3						2
+#define LED4						3
+#define LED5						4
+#define LED6						5
+#define LED7						6
+#define LED8						7
+
 //-------------自定义头文件------------
 #include "ucos_ii.h"
 #include "data_queue.h"
@@ -99,5 +114,6 @@ typedef unsigned char 				bool;
 #include "res_control.h"
 #include "twi.h"
 #include "pcf8563.h"
+#include "board.h"
 
 #endif
