@@ -21,6 +21,8 @@ pgm_read_byte(OSUnMapTbl+OSRdyGrp);
 typedef unsigned char 				bool;
 #define false						0x00
 #define true						0x01
+#define ENABLE						0
+#define DISABLE						1
 
 #define CPU_FREQUENCY				8000000
 

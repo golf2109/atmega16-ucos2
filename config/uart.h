@@ -27,6 +27,9 @@
 #define TBUF_SIZE   	32
 #define BIT_MASK    	0x1F
 
+#define TXBUF_IS_FULL	1
+#define TXBUF_IS_EMPTY	2
+
 typedef struct
 {
 	unsigned char head;
