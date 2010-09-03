@@ -25,6 +25,7 @@ void uart_init(void)
 	UCSRC |= _BV(URSEL) | _BV(UCSZ1) | _BV(UCSZ0);	
 	UCSRB |= _BV(RXEN) | _BV(TXEN);
 	uart_set_baudrate(SYS_BAUDRATE);
+	Tbuf_init();
 }
 
 void uart_putchar(char x)
@@ -71,14 +72,6 @@ void Com_putchar (char x)
 		RTbuf.T_rear=(RTbuf.T_rear+1) & BIT_MASK;
 	}
 	TXC_EN();
-}
-
-void send_terminal_char(void)
-{
-	TXC_DIS();
-	UDR = '\n';
-	TXC_EN();
-
 }
 
 void Com_putstring (char *p,unsigned char len) 

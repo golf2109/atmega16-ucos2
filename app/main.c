@@ -21,7 +21,9 @@ volatile unsigned char t5 = 0;
 void Task1(void *pdata)
 {
 	pdata = pdata;
-
+	char *string = "task1";
+	int count = 0x30;
+	
 	TIMSK &= ~((1<<OCIE0)|(1<<TOIE0));
 	 
 	#if OS_TICKS_PER_SEC <= (F_CPU/1024/256)
@@ -40,11 +42,16 @@ void Task1(void *pdata)
 	
 	while(1)
 	{
-		OSTimeDly(OS_TICKS_PER_SEC*2);
 		PORTB ^= 0x02;
 		DDRA  |= 0x01;
 		PORTA ^= 0x01;
-		uart_putstring("Task1");
+		Com_putstring(string, 5);
+		Com_putstring((char *)&count, 2);
+		Com_putchar(0x0A);
+		Com_putchar(0x0D);
+
+		count++;
+		OSTimeDly(OS_TICKS_PER_SEC/3);
 	}
 }
 
