@@ -72,22 +72,22 @@ typedef unsigned char 				bool;
 #define TC0_CTC						(1<<WGM01)	
 #define TC2_CTC						(1<<WGM21)	
 
-#define EINT0_TRIGGER_MODE_LOW		0
-#define EINT0_TRIGGER_MODE_CHANGE	1
-#define EINT0_TRIGGER_MODE_DOWN		2
-#define EINT0_TRIGGER_MODE_UP		3
+#define EINT0_TRIGGER_MODE_LOW		(0<<ISC00)
+#define EINT0_TRIGGER_MODE_CHANGE	(1<<ISC00)
+#define EINT0_TRIGGER_MODE_DOWN		(2<<ISC00)
+#define EINT0_TRIGGER_MODE_UP		(3<<ISC00)
 
-#define EINT1_TRIGGER_MODE_LOW		0
-#define EINT1_TRIGGER_MODE_CHANGE	1
-#define EINT1_TRIGGER_MODE_DOWN		2
-#define EINT1_TRIGGER_MODE_UP		3
+#define EINT1_TRIGGER_MODE_LOW		(0<<ISC10)
+#define EINT1_TRIGGER_MODE_CHANGE	(1<<ISC10)
+#define EINT1_TRIGGER_MODE_DOWN		(2<<ISC10)
+#define EINT1_TRIGGER_MODE_UP		(3<<ISC10)
 
-#define EINT2_TRIGGER_MODE_DOWN		0
-#define EINT2_TRIGGER_MODE_UP		1
+#define EINT2_TRIGGER_MODE_DOWN		(0<<ISC20)
+#define EINT2_TRIGGER_MODE_UP		(1<<ISC20)
 
-#define INT_CTL_INT0_REQ			(1<<INT0)
-#define INT_CTL_INT1_REQ			(1<<INT1)
-#define INT_CTL_INT2_REQ			(1<<INT2)
+#define EINT0_REQ_EN				(1<<INT0)
+#define EINT1_REQ_EN				(1<<INT1)
+#define EINT2_REQ_EN				(1<<INT2)
 
 //-------------¶Ë¿ÚÉèÖÃ----------------
 #define PA_OUT_REV(x);				{DDRA  |= ((x) & 0x07); PORTA ^= ((x) & 0x07);}

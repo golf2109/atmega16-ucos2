@@ -44,8 +44,6 @@ void Task2(void *pdata)
 {
 	unsigned char err = 0;
 	pdata   =	pdata;
-	
-	timer2_init();
 	 
 	while(1)
 	{        
@@ -73,9 +71,6 @@ void Task4(void *pdata)
 {
 	pdata	= pdata;
 	 
-	MCUCR	|= 0x08;
-	GICR	|= 0x80;
-
 	while(1)
 	{
 		OSTimeDly(OS_TICKS_PER_SEC/3);

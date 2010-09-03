@@ -49,7 +49,7 @@ ISR(ADC_vect)
 			adc_status_flag.is_first_time 	   = TRUE;
 			adc_status_flag.is_current_convert = FALSE;
 
-			adc_switch_channel(ADC_CURRENT);			// 切换通道
+			adc_switch_channel(ADC_CURRENT);	// 切换通道
 			START_ADC();						// 启动AD转换
 		}
 	}
