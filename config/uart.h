@@ -3,33 +3,36 @@
 
 #define SYS_BAUDRATE 	9600
 
-#define RXB8 1
-#define TXB8 0
-#define UPE  2
-#define OVR	 3
-#define FE	 4
-#define UDRE 5
-#define RXC	 7
+#define FRAME_HEAD		0xAA
+
+#define RXB8 			1
+#define TXB8 			0
+#define UPE  			2
+#define OVR	 			3	
+#define FE	 			4
+#define UDRE 			5
+#define RXC	 			7
 
 #define	FRAMING_ERROR  (1<<FE)
 #define	PARITY_ERROR   (1<<UPE)
 #define	DATA_OVERRUN   (1<<OVR)
 #define	RX_COMPLETE    (1<<RXC)
 
-#define REV_EN()    UCSRB |= _BV(RXCIE);
-#define REV_DIS()   UCSRB &= ~_BV(RXCIE);
+#define REV_EN()    	UCSRB |= _BV(RXCIE);
+#define REV_DIS()   	UCSRB &= ~_BV(RXCIE);
 
-#define TXC_EN()    UCSRB |= _BV(TXCIE);
-#define TXC_DIS()   UCSRB &= ~_BV(TXCIE);
+#define TXC_EN()    	UCSRB |= _BV(TXCIE);
+#define TXC_DIS()   	UCSRB &= ~_BV(TXCIE);
 
-#define TBUF_SIZE   32
-#define BIT_MASK    0x1F
+#define TBUF_SIZE   	32
+#define BIT_MASK    	0x1F
 
-typedef struct{
-	unsigned char T_front;
-	unsigned char T_rear;
+typedef struct
+{
+	unsigned char T_head;
+	unsigned char T_tail;
 	unsigned char T_buf[TBUF_SIZE];
-	unsigned char T_disabled;
+	unsigned char T_disable;
 }siocirqueue;
 
 extern siocirqueue RTbuf;
