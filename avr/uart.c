@@ -50,9 +50,10 @@ void uart_init(void)
 
 void uart_putchar(char x)
 {
-	if(x == '\r')
-		uart_putchar(0x09);
-		
+	if(x == '\n')
+	{
+		uart_putchar(0x0D);	
+	}
 	while(!(UCSRA & (1<<UDRE))); 					//最简单的发送函数
 	UDR = x;
 }
@@ -160,6 +161,12 @@ void com_putstring (char *p,unsigned char len)
 	}
 }
 
+void com_putenter(void)
+{
+	com_putchar('\n');
+	com_putchar('\r');
+}
+
 void com_putcommand(CMD *pCmd)
 {
 	com_putchar(FRAME_HEAD);
@@ -187,7 +194,7 @@ ISR(USART_RXC_vect)								//接收完成中断服务子程序
 
 	if((status & (FRAMING_ERROR | DATA_OVERRUN)) == 0)
 	{
-		CmdRcvBuf_AddChar(data);
+		cmd_rcvbuf_add_char(data);
 	}
 }
 

@@ -50,5 +50,6 @@ void com_putcommand(CMD *pCmd);
 void com_putdata(DATA *pData);
 void com_put_ackcommand(void);
 void com_printf(const char* fmt, ...);
+void com_putenter(void);
 
 #endif

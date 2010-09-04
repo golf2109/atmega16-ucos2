@@ -84,9 +84,9 @@ void pcf8536_write(unsigned int addr, unsigned char data)
 /*************************************************************************
 ** 函数名称: PCF8536_wt_p(unsigned int addr,unsigned char *p,unsigned char num)
 ** 功能描述: 向PCF8563地址连续的寄存器写入系列数据
-** 输　入: unsigned int addr    ：高八位为器件地址，低八位为内部寄存器地址
-unsigned char *p    ：需要写入的数据域的起始地址
-unsigned char num   ：写入数据的个数
+** 输　入: 	unsigned int addr    ：高八位为器件地址，低八位为内部寄存器地址
+			unsigned char *p     ：需要写入的数据域的起始地址
+			unsigned char num    ：写入数据的个数
 ** 输出	 : 
 ** 全局变量: 
 ** 调用模块: 

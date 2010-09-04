@@ -90,9 +90,9 @@ typedef unsigned char 				bool;
 #define EINT2_REQ_EN				(1<<INT2)
 
 //-------------¶Ë¿ÚÉèÖÃ----------------
-#define PA_OUT_REV(x);				{DDRA  |= ((x) & 0x07); PORTA ^= ((x) & 0x07);}
-#define PA_OUT_H(x);				{DDRA  |= ((x) & 0x07); PORTA |= ((x) & 0x07);}
-#define PA_OUT_L(x);				{DDRA  |= ((x) & 0x07); PORTA &=~((x) & 0x07);}
+#define PA_OUT_REV(x);				{DDRA  |= (1 << (x & 0x07)); PORTA ^= (1 << (x & 0x07));}
+#define PA_OUT_H(x);				{DDRA  |= (1 << (x & 0x07)); PORTA |= (1 << (x & 0x07));}
+#define PA_OUT_L(x);				{DDRA  |= (1 << (x & 0x07)); PORTA &=~(1 << (x & 0x07));}
 
 //-------------LEDµÆ-------------------
 #define LED1						0

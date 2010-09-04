@@ -18,7 +18,7 @@ typedef struct _MsgTask
 	char *msg;
 }MsgTask;
 
-MsgTask T5mbox 		= {1,"Hello"};
+MsgTask T5mbox 		= {1,"today"};
 MsgTask *pMsgTask 	= &T5mbox;
 
 volatile unsigned short t5 = 0;
@@ -32,8 +32,10 @@ void Task1(void *pdata)
 		PA_OUT_REV(LED1);
 		
 		com_putstring(pMsgTask->msg, 5);
-		
+		com_putenter();
+		//com_printf("%s\n",pMsgTask->msg);
 		OSTimeDly(OS_TICKS_PER_SEC/3);
+
 	}
 }
 
@@ -56,25 +58,35 @@ void Task2(void *pdata)
 void Task3(void *pdata)
 {
 	pdata = pdata;
-	adc_init();
-	
+	//adc_init();
+	unsigned char err = 0;
+	MsgTask *p = (MsgTask *)0;
 	while(1)
 	{
-		adc_switch_channel(ADC_VOLTAGE);
-		START_ADC();
-		OSTimeDly(OS_TICKS_PER_SEC/2);
-		t5 = ADC;
-		com_printf("ADC = %d\n", t5);
+		//adc_switch_channel(ADC_VOLTAGE);
+		//START_ADC();
+		PA_OUT_REV(LED3);
+
+		//t5 = ADC;
+		//com_printf("ADC = %d\n", t5);
+		pMsgTask->cnt = 255-t5;
+		pMsgTask->msg = "Task3";
+		OSMboxPost(Tmbox, (void *)pMsgTask);
+		p = (MsgTask *)OSMboxPend(Tmbox,0,&err);
+		com_putstring(p->msg, 5);
+		com_putenter();
+		
+		OSTimeDly(OS_TICKS_PER_SEC);
 	}
 }
 
 void Task4(void *pdata)
 {
 	pdata	= pdata;
-	 
+	
 	while(1)
 	{
-		OSTimeDly(OS_TICKS_PER_SEC/3);
+		OSTimeDly(OS_TICKS_PER_SEC);
 		PA_OUT_REV(LED8);
 	}
 }
@@ -88,10 +100,14 @@ void Task5(void *pdata)
  
 	while(1)
 	{
-		p = (MsgTask *)OSMboxPend(Tmbox,0,&err);
-				   
+		p = (MsgTask *)OSMboxPend(Tmbox,0,&err);		   
 		t5 = p->cnt;
-		PA_OUT_REV(LED2);	
+		com_putstring(p->msg, 5);
+		com_putenter();
+		
+		p->msg = "Task5";
+		OSMboxPost(Tmbox, (void *)p);
+		PA_OUT_REV(LED5);	
 	}
 }
 

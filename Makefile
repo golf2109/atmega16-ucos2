@@ -56,12 +56,12 @@ CPU_A  = avr/os_cpu_a.S    	\
 		 
 APPS   = app/main.c  		\
 		 avr/uart.c  		\
-		 avr/res_control.c 	\
 		 avr/twi.c			\
-		 avr/pcf8563.c		\
-		 avr/board.c		\
-		 avr/adc.c
-		 
+		 avr/board.c		
+		 #avr/adc.c			\
+		 #avr/pcf8563.c		
+		 #avr/res_control.c
+		 #avr/pcf_8563.c
 # List C source files here. (C dependencies are automatically generated.)
 SRC = $(OS_SRC)     \
       $(CPU_C)      \
